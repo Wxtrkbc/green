@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"green/internal/data"
 	"net/http"
 	"time"
-	"greenlight/internal/data"
 )
 
 func (app *application) createMoviesHandler(w http.ResponseWriter, r *http.Request) {
@@ -21,7 +21,7 @@ func (app *application) showMoviesHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	movie := data.Movie{
+	var movie = data.Movie{
 		ID:        id,
 		CreatedAt: time.Now(),
 		Title:     "Casablanca",
@@ -29,7 +29,6 @@ func (app *application) showMoviesHandler(w http.ResponseWriter, r *http.Request
 		Genres:    []string{"drama", "romance", "war"},
 		Version:   1,
 	}
-
 	err = app.writeJsonResponse(w, http.StatusOK, movie, nil)
 	if err != nil {
 		app.logger.Println(err)

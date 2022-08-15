@@ -1,4 +1,4 @@
-module greenlight.ahprosim.net
+module green
 
 go 1.18
 
