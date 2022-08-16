@@ -1,6 +1,7 @@
 package data
 
 import (
+	"database/sql"
 	"green/internal/validator"
 	"time"
 )
@@ -13,6 +14,10 @@ type Movie struct {
 	Runtime   Runtime   `json:"runtime,omitempty"` // Add the omitempty directive
 	Genres    []string  `json:"genres,omitempty"`  // Add the omitempty directive
 	Version   int32     `json:"version"`
+}
+
+type MovieModel struct {
+	DB *sql.DB
 }
 
 func ValidateMovie(v *validator.Validator, m *Movie) {

@@ -48,7 +48,7 @@ func main() {
 	if err != nil {
 		logger.Fatal(err)
 	}
-	defer  db.Close()
+	defer db.Close()
 	app := &application{
 		config: cfg,
 		logger: logger,
@@ -70,6 +70,11 @@ func main() {
 // /usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres
 //CREATE ROLE greenlight WITH LOGIN PASSWORD 'pa55word';
 //psql --host=localhost --dbname=greenlight --username=greenlight
+
+//migrate create -seq -ext=.sql -dir=./migrations create_movies_table
+//migrate create -seq -ext=.sql -dir=./migrations add_movies_check_constraints
+//migrate -path=./migrations -database="postgres://greenlight:pa55word@localhost/greenlight?sslmode=disable" up
+//
 
 func openDB(cfg config) (*sql.DB, error) {
 	db, err := sql.Open("postgres", cfg.db.dsn)
