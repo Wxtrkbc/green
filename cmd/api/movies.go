@@ -61,14 +61,6 @@ func (app *application) showMoviesHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	//var movie = data.Movie{
-	//	ID:        id,
-	//	CreatedAt: time.Now(),
-	//	Title:     "Casablanca",
-	//	Runtime:   102,
-	//	Genres:    []string{"drama", "romance", "war"},
-	//	Version:   1,
-	//}
 	movie, err := app.models.Movies.Get(id)
 	if err != nil {
 		switch  {
@@ -81,8 +73,6 @@ func (app *application) showMoviesHandler(w http.ResponseWriter, r *http.Request
 	}
 	err = app.writeJsonResponse(w, http.StatusOK, movie, nil)
 	if err != nil {
-		//app.logger.Println(err)
-		//http.Error(w, "The server encountered a problem and could not process your request", http.StatusInternalServerError)
 		app.serverErrorResponse(w, r, err)
 	}
 
@@ -124,8 +114,6 @@ func (app *application) updateMoviesHandler(w http.ResponseWriter, r *http.Reque
 	movie.Runtime = input.Runtime
 	movie.Genres = input.Genres
 
-
-
 	v := validator.New()
 	data.ValidateMovie(v, movie)
 	if !v.Valid() {
@@ -152,8 +140,6 @@ func (app *application) deleteMoviesHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	// Delete the movie from the database, sending a 404 Not Found response to the
-	// client if there isn't a matching record.
 	err = app.models.Movies.Delete(id)
 	if err != nil {
 		switch {
