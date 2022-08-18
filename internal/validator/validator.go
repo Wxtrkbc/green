@@ -6,13 +6,12 @@ var (
 	EmailRX = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 )
 
-
 type Validator struct {
 	Errors map[string]string
 }
 
-func New() *Validator{
-	return &Validator{Errors:make(map[string]string)}
+func New() *Validator {
+	return &Validator{Errors: make(map[string]string)}
 }
 
 func (v *Validator) Valid() bool {
@@ -20,7 +19,7 @@ func (v *Validator) Valid() bool {
 }
 
 func (v *Validator) AddError(k, msg string) {
-	if _, exists := v.Errors[k]; !exists{
+	if _, exists := v.Errors[k]; !exists {
 		v.Errors[k] = msg
 	}
 }
@@ -40,8 +39,7 @@ func In(key string, lists ...string) bool {
 	return false
 }
 
-
-func Matches(value string, re * regexp.Regexp) bool {
+func Matches(value string, re *regexp.Regexp) bool {
 	return re.MatchString(value)
 }
 

@@ -3,13 +3,14 @@ package main
 import (
 	"context"
 	"database/sql"
+	"expvar"
 	"flag"
-	"fmt"
 	_ "github.com/lib/pq"
 	"green/internal/data"
 	"log"
-	"net/http"
 	"os"
+	"runtime"
+	"sync"
 	"time"
 )
 
@@ -30,6 +31,7 @@ type application struct {
 	config config
 	logger *log.Logger
 	models data.Models
+	wg     sync.WaitGroup
 }
 
 func main() {
@@ -50,23 +52,26 @@ func main() {
 		logger.Fatal(err)
 	}
 	defer db.Close()
+
+	expvar.Publish("goroutines", expvar.Func(func() interface{} {
+		return runtime.NumGoroutine()
+	}))
+	expvar.Publish("databases", expvar.Func(func() interface{} {
+		return db.Stats()
+	}))
+
+	expvar.Publish("timestamp", expvar.Func(func() interface{} {
+		return time.Now().Unix()
+	}))
 	app := &application{
 		config: cfg,
 		logger: logger,
 		models: data.NewModels(db),
 	}
 
-	srv := &http.Server{
-		Addr:         fmt.Sprintf(":%d", cfg.port),
-		Handler:      app.routers(),
-		IdleTimeout:  time.Minute,
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 30 * time.Second,
-	}
-
-	logger.Printf("starting %s server on %s", cfg.env, srv.Addr)
-	err = srv.ListenAndServe()
+	err = app.serve()
 	logger.Fatal(err)
+
 }
 
 // /usr/local/opt/postgresql/bin/postgres -D /usr/local/var/postgres

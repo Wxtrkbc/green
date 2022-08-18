@@ -37,7 +37,7 @@ func (app *application) createMoviesHandler(w http.ResponseWriter, r *http.Reque
 
 	err = app.models.Movies.Insert(movie)
 	if err != nil {
-		app.serverErrorResponse(w,r,err)
+		app.serverErrorResponse(w, r, err)
 		return
 	}
 
@@ -46,7 +46,7 @@ func (app *application) createMoviesHandler(w http.ResponseWriter, r *http.Reque
 
 	err = app.writeJsonResponse(w, http.StatusCreated, movie, headers)
 	if err != nil {
-		app.serverErrorResponse(w,r,err)
+		app.serverErrorResponse(w, r, err)
 		return
 	}
 }
@@ -63,7 +63,7 @@ func (app *application) showMoviesHandler(w http.ResponseWriter, r *http.Request
 
 	movie, err := app.models.Movies.Get(id)
 	if err != nil {
-		switch  {
+		switch {
 		case errors.Is(err, data.ErrRecordNotFound):
 			app.notFoundResponse(w, r)
 		default:
@@ -153,7 +153,7 @@ func (app *application) deleteMoviesHandler(w http.ResponseWriter, r *http.Reque
 
 	err = app.writeJsonResponse(w, http.StatusOK, map[string]string{"message": "movie deleted"}, nil)
 	if err != nil {
-		app.serverErrorResponse(w,r,err)
+		app.serverErrorResponse(w, r, err)
 		return
 	}
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"expvar"
 	"github.com/julienschmidt/httprouter"
 	"net/http"
 )
@@ -15,5 +16,8 @@ func (app *application) routers() *httprouter.Router {
 	router.HandlerFunc(http.MethodPut, "/v1/movies/:id", app.updateMoviesHandler)
 	router.HandlerFunc(http.MethodDelete, "/v1/movies/:id", app.deleteMoviesHandler)
 
+	//return app.recoverPanic(router)
+
+	router.Handler(http.MethodGet, "/debug/vars", expvar.Handler())
 	return router
 }
